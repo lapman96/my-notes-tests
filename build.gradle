@@ -1,6 +1,6 @@
 plugins {
     id 'java-library'
-    id("io.freefair.lombok") version "8.6"
+    id("io.freefair.lombok") version "8.7.1"
 }
 
 wrapper {
@@ -37,9 +37,9 @@ test {
     systemProperties System.getProperties()
 
     useJUnitPlatform {
-        if (project.hasProperty('testTags')) {
-            String[] tags = project.testTags.split(',')
-            includeTags(*tags)
+        if (project.hasProperty('tags')) {
+            String[] testTags = project.tags.split(',')
+            includeTags(*testTags)
         } else {
             includeTags("P1")
         }

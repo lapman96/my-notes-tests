@@ -7,27 +7,31 @@ import org.junit.jupiter.api.BeforeAll;
 import org.openqa.selenium.Platform;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
+import static com.mynotes.data.PropertiesManager.IS_REMOTE_RUN;
+import static com.mynotes.data.PropertiesManager.TEST_BROWSER;
+
 public abstract class BaseUiTest {
     protected static ThreadLocal<UsersClient> usersClient;
     protected static ThreadLocal<NotesClient> notesClient;
 
     @BeforeAll
     public static void setUp(){
-        if ("true".equals(System.getProperty("run_remotely"))) {
-            Configuration.remote = "http://localhost:4444/wd/hub";
-            DesiredCapabilities desiredCapabilities = new DesiredCapabilities();
-            desiredCapabilities.setPlatform(Platform.WIN11);
-            Configuration.browserCapabilities = desiredCapabilities;
+        if ("true".equals(IS_REMOTE_RUN)) {
+            configureRemoteTestRun();
         }
 
-        Configuration.browser = System.getProperty("browser");
+        Configuration.browser = TEST_BROWSER;
         Configuration.timeout = 10000;
         Configuration.screenshots = true;
         Configuration.fastSetValue = false;
-        Configuration.headless = true;
+        Configuration.headless = false;
         Configuration.reopenBrowserOnFail = true;
+    }
 
-        usersClient = ThreadLocal.withInitial(UsersClient::new);
-        notesClient = ThreadLocal.withInitial(NotesClient::new);
+    private static void configureRemoteTestRun() {
+        Configuration.remote = "http://localhost:4444/wd/hub";
+        DesiredCapabilities desiredCapabilities = new DesiredCapabilities();
+        desiredCapabilities.setPlatform(Platform.WIN11);
+        Configuration.browserCapabilities = desiredCapabilities;
     }
 }

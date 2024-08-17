@@ -4,7 +4,7 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class PagePaths extends DataFromPropertyFiles {
+public class PagePaths extends PropertiesManager {
 
     public static final String EXPAND_TESTING_BASE_UI_URL = properties.getProperty("expand_testing_ui_base_url");
 

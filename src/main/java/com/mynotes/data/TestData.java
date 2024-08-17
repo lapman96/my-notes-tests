@@ -5,7 +5,7 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class TestData extends DataFromPropertyFiles {
+public class TestData extends PropertiesManager {
 
     public static final String TEST_USER_EMAIL = properties.getProperty("test_user_email");
 

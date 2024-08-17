@@ -6,6 +6,7 @@ import com.mynotes.models.request.CreateNoteRequestFormParams;
 import com.mynotes.models.request.GetTokenRequestFormParams;
 import com.mynotes.pageobjects.LoginPage;
 import com.mynotes.pageobjects.WelcomePage;
+import org.junit.jupiter.api.AfterEach;
 import testcases.BaseUiTest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
@@ -13,6 +14,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.Objects;
 
+import static com.codeborne.selenide.Selenide.closeWebDriver;
 import static com.mynotes.data.TestData.*;
 import static com.mynotes.utils.RandomStringGenerator.generateRandomString;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -72,5 +74,10 @@ class EndToEndUiTest extends BaseUiTest {
                 .doesNoteCartExist(noteCard -> Objects.equals(noteCard.getTitle(), note.get().getTitle()));
 
         assertThat(noteExists).isFalse();
+    }
+
+    @AfterEach
+    public void afterEachTest() {
+        closeWebDriver();
     }
 }
