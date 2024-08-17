@@ -1,6 +1,6 @@
-# DemoQA
+# Notes App
 
-This project involves my practice in automating tests using Java for the test website - [DemoQA](https://demoqa.com).
+This project involves my practice in automating tests using Java for the test website - [Notes App](https://practice.expandtesting.com/notes/app).
 
 ## Running Tests
 
