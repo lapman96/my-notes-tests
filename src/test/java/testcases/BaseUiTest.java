@@ -24,7 +24,7 @@ public abstract class BaseUiTest {
         Configuration.timeout = 10000;
         Configuration.screenshots = true;
         Configuration.fastSetValue = false;
-        Configuration.headless = false;
+        Configuration.headless = true;
         Configuration.reopenBrowserOnFail = true;
     }
 

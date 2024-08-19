@@ -7,7 +7,7 @@ This project involves my practice in automating tests using Java for the test we
 To run the tests, use the below command in your terminal:
 
 ``
-gradle test -Denv=<environment> -Dbrowser=<browser> -Dtags="<tagName1>,<tagName2>,..." -Drun_remotely=<boolean>
+gradle test -Denv=<environment> -Dbrowser=<browser> -Ptags="<tagName1>,<tagName2>,..." -Drun_remotely=<boolean>
 ``
 - **Denv** - specify the environment in which the tests will be run.
 - **Dbrowser** - set the browser for running the tests.
@@ -17,5 +17,5 @@ gradle test -Denv=<environment> -Dbrowser=<browser> -Dtags="<tagName1>,<tagName2
 Example:
 
 ``
-gradle test -Denv=prod -Dbrowser=chrome -Dtags="P1" -Drun_remotely=false
+gradle test -Denv=prod -Dbrowser=chrome -Ptags="P1" -Drun_remotely=false
 ``
