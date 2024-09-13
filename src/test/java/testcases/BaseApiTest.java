@@ -5,11 +5,12 @@ import com.mynotes.client.UsersClient;
 import com.mynotes.models.request.GetTokenRequestFormParams;
 import com.mynotes.validator.NotesValidator;
 import com.mynotes.validator.UsersValidator;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.TestInfo;
-import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import static com.mynotes.data.TestData.TEST_USER_EMAIL;
@@ -17,7 +18,7 @@ import static com.mynotes.data.TestData.TEST_USER_PASSWORD;
 
 public class BaseApiTest {
 
-    private static final ThreadLocal<Logger> logger = ThreadLocal.withInitial(() -> LoggerFactory.getLogger(BaseApiTest.class));
+    private static final ThreadLocal<Logger> logger = ThreadLocal.withInitial(() -> LogManager.getLogger("ASYNC_CONSOLE_APPENDER"));
 
     protected static ThreadLocal<UsersClient> usersClient;
     protected static ThreadLocal<NotesClient> notesClient;

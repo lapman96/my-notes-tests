@@ -35,9 +35,9 @@ dependencies {
     implementation libs.io.rest.assured
     implementation libs.io.rest.assured.json.schema.validator
 
-    //Logging
-    implementation libs.org.slf4j
-    testImplementation libs.slf4j.simple
+    //Log4j 2
+    testImplementation libs.org.apache.logging.log4j
+    testImplementation libs.org.apache.logging.log4j.api
 
     //Junit5
     testImplementation libs.org.junit.jupiter.junit.jupiter.api
