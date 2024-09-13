@@ -8,6 +8,8 @@ org-junit-jupiter-engine = "5.10.0"
 io-rest-assured = "5.4.0"
 com-fasterxml-jackson-core = "2.17.0"
 org-slf4j = "2.0.12"
+io-qameta-allure = "2.25.0"
+org-aspectj-aspectjweaver = "1.9.21"
 
 [libraries]
 com-codeborne-selenide = { module = "com.codeborne:selenide", version.ref = "com-codeborne-selenide" }
@@ -21,3 +23,7 @@ io-rest-assured-json-schema-validator = { module = "io.rest-assured:json-schema-
 com-fasterxml-jackson-core = { module = "com.fasterxml.jackson.core:jackson-databind", version.ref = "com-fasterxml-jackson-core" }
 org-slf4j = { module = "org.slf4j:slf4j-api", version.ref = "org-slf4j" }
 slf4j-simple = { module = "org.slf4j:slf4j-simple", version.ref = "org-slf4j" }
+io-qameta-allure-bom = { module = "io.qameta.allure:allure-bom", version.ref = "io-qameta-allure" }
+io-qameta-allure-junit5 = { module = "io.qameta.allure:allure-junit5", version.ref = "io-qameta-allure" }
+io-qameta-allure-rest-assured = { module = "io.qameta.allure:allure-rest-assured", version.ref = "io-qameta-allure" }
+org-aspectj-aspectjweaver = { module = "org.aspectj:aspectjweaver", version.ref = "org-aspectj-aspectjweaver" }

@@ -5,7 +5,10 @@ import com.mynotes.client.UsersClient;
 import com.mynotes.models.request.GetTokenRequestFormParams;
 import com.mynotes.validator.NotesValidator;
 import com.mynotes.validator.UsersValidator;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.TestInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -15,10 +18,6 @@ import static com.mynotes.data.TestData.TEST_USER_PASSWORD;
 public class BaseApiTest {
 
     private static final ThreadLocal<Logger> logger = ThreadLocal.withInitial(() -> LoggerFactory.getLogger(BaseApiTest.class));
-
-    public static void step(String message) {
-        logger.get().info(message);
-    }
 
     protected static ThreadLocal<UsersClient> usersClient;
     protected static ThreadLocal<NotesClient> notesClient;
@@ -38,5 +37,19 @@ public class BaseApiTest {
                 .email(TEST_USER_EMAIL)
                 .password(TEST_USER_PASSWORD)
                 .build()));
+    }
+
+    @BeforeEach
+    void beforeEachTest(TestInfo testInfo) {
+        step("Starting test:" + testInfo.getDisplayName());
+    }
+
+    @AfterEach
+    void afterEachTest(TestInfo testInfo) {
+        step("Finishing test:" + testInfo.getDisplayName());
+    }
+
+    protected static void step(String message) {
+        logger.get().info(message);
     }
 }

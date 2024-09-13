@@ -3,6 +3,7 @@ package com.mynotes.client;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.qameta.allure.restassured.AllureRestAssured;
 import io.restassured.RestAssured;
 import io.restassured.http.Header;
 import io.restassured.response.Response;
@@ -27,7 +28,7 @@ public abstract class BaseClient {
     private Response response;
 
     private RequestSpecification getSpecification(Header... headers) {
-        RequestSpecification requestSpecification = RestAssured.given();
+        RequestSpecification requestSpecification = RestAssured.given().filter(new AllureRestAssured());
 
         Arrays.stream(headers).forEach(requestSpecification::header);
         return requestSpecification;

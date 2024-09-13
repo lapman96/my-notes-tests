@@ -1,13 +1,20 @@
 package testcases.endtoend;
 
+import io.qameta.allure.Epic;
+import io.qameta.allure.Link;
+import io.qameta.allure.Owner;
+import io.qameta.allure.Severity;
 import org.junit.jupiter.api.*;
 import testcases.BaseApiTest;
 
 import static com.mynotes.data.JsonSchema.GET_NOTE_BY_ID_RESPONSE_JSON_SCHEMA;
 import static com.mynotes.data.TestData.REQUEST_PARAMS_FOR_DEFAULT_NOTE;
+import static io.qameta.allure.SeverityLevel.CRITICAL;
 import static org.assertj.core.api.Assertions.assertThat;
 
-@Tag("API")
+@Tags({@Tag("API"), @Tag("EndToEnd")})
+@Owner("Serhii Lapin")
+@Link(name = "Notes API Documentation", url = "https://practice.expandtesting.com/notes/api/api-docs/")
 class EndToEndApiTest extends BaseApiTest {
 
     private ThreadLocal<String> noteId;
@@ -17,8 +24,11 @@ class EndToEndApiTest extends BaseApiTest {
         noteId = ThreadLocal.withInitial(String::new);
     }
 
-    @Tag("P1")
     @Test
+    @Tag("P1")
+    @Epic("E2E")
+    @DisplayName("[E2E] Check the ability to add and remove a product from the cart")
+    @Severity(CRITICAL)
     void checkTheAbilityToAddAndRemoveProductFromCart() {
 
         step("Create a note and get its ID");

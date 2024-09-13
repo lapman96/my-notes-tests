@@ -14,18 +14,45 @@ repositories {
     }
 }
 
+configurations {
+    agent {
+        canBeResolved = true
+        canBeConsumed = true
+    }
+}
+
 dependencies {
+    //Selenide
     api libs.com.codeborne.selenide
+
+    //WebDriverManager
     api libs.io.github.bonigarcia.webdrivermanager
-    implementation libs.org.slf4j
+
+    //Assertj
+    implementation libs.org.assertj.assertj.core
+
+    //RestAssured
     implementation libs.io.rest.assured
     implementation libs.io.rest.assured.json.schema.validator
-    implementation libs.org.assertj.assertj.core
+
+    //Logging
+    implementation libs.org.slf4j
+    testImplementation libs.slf4j.simple
+
+    //Junit5
     testImplementation libs.org.junit.jupiter.junit.jupiter.api
     testImplementation libs.org.junit.jupiter.junit.jupiter.params
     testImplementation libs.org.junit.jupiter.engine
+
+    //Jackson
     testImplementation libs.com.fasterxml.jackson.core
-    testImplementation libs.slf4j.simple
+
+    //Allure
+    testImplementation libs.io.qameta.allure.bom
+    testImplementation libs.io.qameta.allure.junit5
+    implementation libs.io.qameta.allure.rest.assured
+
+    agent libs.org.aspectj.aspectjweaver
 }
 
 group = 'com.epam'
@@ -33,7 +60,12 @@ version = '1.0-SNAPSHOT'
 description = 'Pet project to practice automation testing skills in Java'
 java.sourceCompatibility = JavaVersion.VERSION_17
 
+tasks.register('cleanTestResultsFromPreviousRuns', Delete) {
+    delete 'build/test-results', 'allure-results'
+}
+
 test {
+    dependsOn cleanTestResultsFromPreviousRuns
     systemProperties System.getProperties()
 
     useJUnitPlatform {
@@ -44,4 +76,6 @@ test {
             includeTags("P1")
         }
     }
+
+    jvmArgs = [ "-javaagent:${configurations.agent.singleFile}" ]
 }

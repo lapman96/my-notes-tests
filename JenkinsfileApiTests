@@ -1,0 +1,23 @@
+pipeline {
+    agent { label 'macOS'}
+    parameters {
+      choice choices: ['prod'], description: 'Select an environment for running tests', name: 'ENVIRONMENT'
+      text defaultValue: 'P1', description: 'Specify the test tags to run, separated by commas. Note: "API" tag has been already preselected', name: 'TAGS'
+    }
+    options {
+      buildDiscarder(logRotator(numToKeepStr: '10', daysToKeepStr: '30'))
+    }
+    stages {
+        stage('Test') {
+            steps {
+                echo "Running tests in the selected environment: ${params.ENVIRONMENT}, browser: ${params.BROWSER}, with tags:API, ${params.TAGS}"
+                sh "./gradlew test -Denv=${params.ENVIRONMENT} -Dbrowser=${params.BROWSER} -Ptags=\"API, ${params.TAGS}\" -Drun_remotely=false --info"
+            }
+        }
+    }
+    post {
+        always {
+            allure includeProperties: false, jdk: '', results: [[path: 'build/allure-results']]
+        }
+    }
+}

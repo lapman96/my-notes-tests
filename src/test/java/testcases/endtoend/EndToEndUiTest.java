@@ -35,7 +35,7 @@ class EndToEndUiTest extends BaseUiTest {
                 .build());
     }
 
-    @Tag("P1")
+    @Tag("P2")
     @Test
     void checkEndToEndEndScenarioWithRemovingNoteOnlyUiApproach() {
         boolean noteExists = new WelcomePage().openPage()
@@ -51,7 +51,7 @@ class EndToEndUiTest extends BaseUiTest {
         assertThat(noteExists).isFalse();
     }
 
-    @Tag("P1")
+    @Tag("P2")
     @Test
     void checkEndToEndEndScenarioWithRemovingNoteOnlyHybridApproach() {
         String token = usersClient.get().getToken(GetTokenRequestFormParams.builder()
