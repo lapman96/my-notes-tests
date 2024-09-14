@@ -5,6 +5,7 @@ import com.mynotes.client.BaseClient;
 import java.io.File;
 
 import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchema;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public abstract class BaseValidator {
 
@@ -14,7 +15,15 @@ public abstract class BaseValidator {
         this.client = client;
     }
 
-    protected abstract BaseValidator validateStatusCode(int expectedStatusCode);
+    public BaseValidator validateStatusCode(int expectedStatusCode) {
+        assertThat(client.getResponse().statusCode()).isEqualTo(expectedStatusCode);
+        return this;
+    }
+
+    public BaseValidator validateValueByJsonPath(String jsonPath, String expectedValue) {
+        assertThat(client.getResponse().jsonPath().getString(jsonPath)).isEqualTo(expectedValue);
+        return this;
+    }
 
     public void validateResponseAgainstJsonSchema(File jsonSchema) {
         client.getResponse().then().body(matchesJsonSchema(jsonSchema));

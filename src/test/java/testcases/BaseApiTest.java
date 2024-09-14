@@ -11,7 +11,6 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.TestInfo;
-import org.slf4j.LoggerFactory;
 
 import static com.mynotes.data.TestData.TEST_USER_EMAIL;
 import static com.mynotes.data.TestData.TEST_USER_PASSWORD;
@@ -47,6 +46,13 @@ public class BaseApiTest {
 
     @AfterEach
     void afterEachTest(TestInfo testInfo) {
+        step("Delete all notes");
+        notesClient.get().getNotes(token.get());
+        notesClient.get().getResponse().jsonPath().getList("data.id").forEach(noteId -> {
+            notesClient.get().deleteNote(noteId.toString(), token.get());
+            notesValidator.get().validateStatusCode(200);
+        });
+
         step("Finishing test:" + testInfo.getDisplayName());
     }
 

@@ -13,11 +13,6 @@ public class NotesValidator extends BaseValidator {
         super(client);
     }
 
-    public NotesValidator validateStatusCode(int expectedStatusCode) {
-        assertThat(client.getResponse().statusCode()).isEqualTo(expectedStatusCode);
-        return this;
-    }
-
     public void validateNoteByIdNotExist(String noteId) {
         boolean noteExists = client.getResponse().as(GetNotesResponse.class).getData()
                 .stream()
