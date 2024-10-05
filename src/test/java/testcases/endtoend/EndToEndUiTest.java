@@ -6,6 +6,7 @@ import com.mynotes.models.request.CreateNoteRequestFormParams;
 import com.mynotes.models.request.GetTokenRequestFormParams;
 import com.mynotes.pageobjects.LoginPage;
 import com.mynotes.pageobjects.WelcomePage;
+import io.qameta.allure.Allure;
 import org.junit.jupiter.api.AfterEach;
 import testcases.BaseUiTest;
 import org.junit.jupiter.api.BeforeEach;
@@ -38,42 +39,46 @@ class EndToEndUiTest extends BaseUiTest {
     @Tag("P2")
     @Test
     void checkEndToEndEndScenarioWithRemovingNoteOnlyUiApproach() {
-        boolean noteExists = new WelcomePage().openPage()
+        boolean noteExists = Allure.step("Add and delete note using UI", () -> new WelcomePage().openPage()
                 .openLoginPage()
-                .loginWithEmailAndPassword(TEST_USER_EMAIL,TEST_USER_PASSWORD)
+                .loginWithEmailAndPassword(TEST_USER_EMAIL, TEST_USER_PASSWORD)
                 .addNewNote()
                 .createNote(note.get())
                 .getNoteCardByCondition(noteCard -> Objects.equals(noteCard.getTitle(), note.get().getTitle()))
                 .deleteNote()
                 .clickDeleteButton()
-                .doesNoteCartExist(noteCard -> Objects.equals(noteCard.getTitle(), note.get().getTitle()));
+                .doesNoteCartExist(noteCard -> Objects.equals(noteCard.getTitle(), note.get().getTitle())));
 
-        assertThat(noteExists).isFalse();
+        Allure.step("Validate that the note does not exist", () -> {
+            assertThat(noteExists).isFalse();
+        });
     }
 
     @Tag("P2")
     @Test
     void checkEndToEndEndScenarioWithRemovingNoteOnlyHybridApproach() {
-        String token = usersClient.get().getToken(GetTokenRequestFormParams.builder()
+        String token = Allure.step("Get token using API", () -> usersClient.get().getToken(GetTokenRequestFormParams.builder()
                 .email(TEST_USER_EMAIL)
                 .password(TEST_USER_PASSWORD)
-                .build());
+                .build()));
 
-        notesClient.get().createNote(CreateNoteRequestFormParams.builder()
+        Allure.step("Create note using API", () -> notesClient.get().createNote(CreateNoteRequestFormParams.builder()
                 .title(note.get().getTitle())
                 .description(note.get().getDescription())
                 .category(note.get().getCategory().getCategoryName())
-                .build(), token);
+                .build(), token));
 
-        boolean noteExists = new LoginPage()
+        boolean noteExists = Allure.step("Delete note using UI", () -> new LoginPage()
                 .openPage()
                 .loginWithToken(token)
                 .getNoteCardByCondition(noteCard -> Objects.equals(noteCard.getTitle(), note.get().getTitle()))
                 .deleteNote()
                 .clickDeleteButton()
-                .doesNoteCartExist(noteCard -> Objects.equals(noteCard.getTitle(), note.get().getTitle()));
+                .doesNoteCartExist(noteCard -> Objects.equals(noteCard.getTitle(), note.get().getTitle())));
 
-        assertThat(noteExists).isFalse();
+        Allure.step("Validate that the note does not exist", () -> {
+            assertThat(noteExists).isFalse();
+        });
     }
 
     @AfterEach

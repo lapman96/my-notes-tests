@@ -5,6 +5,7 @@ import com.mynotes.client.UsersClient;
 import com.mynotes.models.request.GetTokenRequestFormParams;
 import com.mynotes.validator.NotesValidator;
 import com.mynotes.validator.UsersValidator;
+import io.qameta.allure.Allure;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.junit.jupiter.api.AfterEach;
@@ -46,11 +47,12 @@ public class BaseApiTest {
 
     @AfterEach
     void afterEachTest(TestInfo testInfo) {
-        step("Delete all notes");
-        notesClient.get().getNotes(token.get());
-        notesClient.get().getResponse().jsonPath().getList("data.id").forEach(noteId -> {
-            notesClient.get().deleteNote(noteId.toString(), token.get());
-            notesValidator.get().validateStatusCode(200);
+        Allure.step("Cleanup: Delete all notes", () -> {
+            notesClient.get().getNotes(token.get());
+            notesClient.get().getResponse().jsonPath().getList("data.id").forEach(noteId -> {
+                notesClient.get().deleteNote(noteId.toString(), token.get());
+                notesValidator.get().validateStatusCode(200);
+            });
         });
 
         step("Finishing test:" + testInfo.getDisplayName());

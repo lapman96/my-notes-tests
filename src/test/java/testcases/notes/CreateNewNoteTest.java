@@ -1,10 +1,7 @@
 package testcases.notes;
 
 import com.mynotes.models.request.CreateNoteRequestFormParams;
-import io.qameta.allure.Epic;
-import io.qameta.allure.Feature;
-import io.qameta.allure.Severity;
-import io.qameta.allure.Story;
+import io.qameta.allure.*;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -26,19 +23,21 @@ class CreateNewNoteTest extends BaseApiTest {
     @CsvFileSource(resources = "/testdata/csv/validNotes.csv", numLinesToSkip = 1, delimiter = '|')
     @Severity(CRITICAL)
     void checkTheAbilityToCreateNewNote(String title, String description, String category) {
-        step("Create a note and get its ID");
-        CreateNoteRequestFormParams requestFormParams = CreateNoteRequestFormParams.builder()
-                .title(title)
-                .description(description)
-                .category(category)
-                .build();
-        notesClient.get().createNote(requestFormParams, token.get());
-        String noteId = (notesClient.get().getResponseValueByPath("data.id"));
+        String noteId = Allure.step("Create a note and get its ID", () -> {
+            CreateNoteRequestFormParams requestFormParams = CreateNoteRequestFormParams.builder()
+                    .title(title)
+                    .description(description)
+                    .category(category)
+                    .build();
+            notesClient.get().createNote(requestFormParams, token.get());
+            return notesClient.get().getResponseValueByPath("data.id");
+        });
 
-        step("Get note by ID and validate it");
-        notesClient.get().getNote(noteId, token.get());
-        notesValidator.get().validateStatusCode(200);
-        assertThat(notesClient.get().getResponseValueByPath("data.id")).isEqualTo(noteId);
+        Allure.step("Get note by ID and validate it", () -> {
+            notesClient.get().getNote(noteId, token.get());
+            notesValidator.get().validateStatusCode(200);
+            assertThat(notesClient.get().getResponseValueByPath("data.id")).isEqualTo(noteId);
+        });
     }
 
     @ParameterizedTest(name = "Invalid title: \"{0}\"")
@@ -49,20 +48,21 @@ class CreateNewNoteTest extends BaseApiTest {
     @CsvFileSource(resources = "/testdata/csv/invalidTitles.csv")
     @Severity(NORMAL)
     void checkTheAbilityToCreateNewNoteWithInvalidTitle(String invalidTitle) {
-        step("Create a note with invalid title");
-        CreateNoteRequestFormParams requestFormParams = CreateNoteRequestFormParams.builder()
-                .title(invalidTitle)
-                .description("New description")
-                .category("Home")
-                .build();
+        Allure.step("Create a note with invalid title", () -> {
+            CreateNoteRequestFormParams requestFormParams = CreateNoteRequestFormParams.builder()
+                    .title(invalidTitle)
+                    .description("New description")
+                    .category("Home")
+                    .build();
+            notesClient.get().createNote(requestFormParams, token.get());
+        });
 
-        notesClient.get().createNote(requestFormParams, token.get());
-
-        step("Validate response");
-        notesValidator.get().validateStatusCode(400)
-                .validateValueByJsonPath("success", "false")
-                .validateValueByJsonPath("status", "400")
-                .validateValueByJsonPath("message", "Title must be between 4 and 100 characters");
+        Allure.step("Validate response", () -> {
+            notesValidator.get().validateStatusCode(400)
+                    .validateValueByJsonPath("success", "false")
+                    .validateValueByJsonPath("status", "400")
+                    .validateValueByJsonPath("message", "Title must be between 4 and 100 characters");
+        });
     }
 
     @ParameterizedTest(name = "Invalid description: \"{0}\"")
@@ -73,19 +73,20 @@ class CreateNewNoteTest extends BaseApiTest {
     @CsvFileSource(resources = "/testdata/csv/invalidDescriptions.csv")
     @Severity(NORMAL)
     void checkTheAbilityToCreateNewNoteWithInvalidDescription(String invalidDescription) {
-        step("Create a note with invalid title");
-        CreateNoteRequestFormParams requestFormParams = CreateNoteRequestFormParams.builder()
-                .title("New title")
-                .description(invalidDescription)
-                .category("Home")
-                .build();
+        Allure.step("Create a note with invalid description", () -> {
+            CreateNoteRequestFormParams requestFormParams = CreateNoteRequestFormParams.builder()
+                    .title("New title")
+                    .description(invalidDescription)
+                    .category("Home")
+                    .build();
+            notesClient.get().createNote(requestFormParams, token.get());
+        });
 
-        notesClient.get().createNote(requestFormParams, token.get());
-
-        step("Validate response");
-        notesValidator.get().validateStatusCode(400)
-                .validateValueByJsonPath("success", "false")
-                .validateValueByJsonPath("status", "400")
-                .validateValueByJsonPath("message", "Description must be between 4 and 1000 characters");
+        Allure.step("Validate response", () -> {
+            notesValidator.get().validateStatusCode(400)
+                    .validateValueByJsonPath("success", "false")
+                    .validateValueByJsonPath("status", "400")
+                    .validateValueByJsonPath("message", "Description must be between 4 and 1000 characters");
+        });
     }
 }

@@ -21,24 +21,28 @@ class EndToEndApiTest extends BaseApiTest {
     @Severity(CRITICAL)
     void checkTheAbilityToAddAndRemoveProductFromCart() {
 
-        step("Create a note and get its ID");
-        notesClient.get().createNote(REQUEST_PARAMS_FOR_DEFAULT_NOTE,token.get());
-        notesValidator.get().validateStatusCode(200);
-        String noteId = notesClient.get().getResponseValueByPath("data.id");
+        String noteId = Allure.step("Create a note and get its ID", () -> {
+            notesClient.get().createNote(REQUEST_PARAMS_FOR_DEFAULT_NOTE, token.get());
+            notesValidator.get().validateStatusCode(200);
+            return notesClient.get().getResponseValueByPath("data.id");
+        });
 
-        step("Get note by ID and validate it");
-        notesClient.get().getNote(noteId, token.get());
-        notesValidator.get().validateStatusCode(200)
-                .validateResponseAgainstJsonSchema(GET_NOTE_BY_ID_RESPONSE_JSON_SCHEMA);
-        assertThat(notesClient.get().getResponseValueByPath("data.id")).isEqualTo(noteId);
+        Allure.step("Get note by ID and validate it", () -> {
+            notesClient.get().getNote(noteId, token.get());
+            notesValidator.get().validateStatusCode(200)
+                    .validateResponseAgainstJsonSchema(GET_NOTE_BY_ID_RESPONSE_JSON_SCHEMA);
+            assertThat(notesClient.get().getResponseValueByPath("data.id")).isEqualTo(noteId);
+        });
 
-        step("Delete the created note");
-        notesClient.get().deleteNote(noteId, token.get());
-        notesValidator.get().validateStatusCode(200);
+        Allure.step("Delete the created note", () -> {
+            notesClient.get().deleteNote(noteId, token.get());
+            notesValidator.get().validateStatusCode(200);
+        });
 
-        step("Verify that the note is removed");
-        notesClient.get().getNotes(token.get());
-        notesValidator.get().validateStatusCode(200);
-        notesValidator.get().validateNoteByIdNotExist(noteId);
+        Allure.step("Verify that the note is removed", () -> {
+            notesClient.get().getNotes(token.get());
+            notesValidator.get().validateStatusCode(200);
+            notesValidator.get().validateNoteByIdNotExist(noteId);
+        });
     }
 }
