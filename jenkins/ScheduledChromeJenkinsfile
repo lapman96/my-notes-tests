@@ -1,0 +1,26 @@
+pipeline {
+    agent any
+    environment {
+        ENVIRONMENT = 'prod'
+        TAGS = 'P1'
+    }
+    options {
+        buildDiscarder(logRotator(numToKeepStr: '10', daysToKeepStr: '30'))
+    }
+    triggers {
+        cron('0 3 * * *')
+    }
+    stages {
+        stage('Test') {
+            steps {
+                echo "Running tests in the selected environment: ${ENVIRONMENT}, with tags: ${TAGS}"
+                sh "./gradlew test -Denv=${ENVIRONMENT} -Ptags=\"${TAGS}\" --info"
+            }
+        }
+    }
+    post {
+        always {
+            allure includeProperties: false, jdk: '', results: [[path: 'build/allure-results']]
+        }
+    }
+}
